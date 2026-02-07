@@ -14,7 +14,13 @@ import {
   BlessingCard,
   blessingCardSchema,
 } from "@/components/tambo/blessing-card";
+import { 
+  InteractiveBlessingCard 
+} from "@/components/tambo/interactive-blessing-card";
 import { MemeCard, memeCardSchema } from "@/components/tambo/meme-card";
+import { 
+  InteractiveMemeCard 
+} from "@/components/tambo/interactive-meme-card";
 import {
   GeneratedMemeImage,
   generatedMemeImageSchema,
@@ -126,15 +132,15 @@ export const components: TamboComponent[] = [
   {
     name: "BlessingCard",
     description:
-      "A component that displays Spring Festival blessings with different styles (traditional, humorous, literary, business). Each blessing includes a title, content, style indicator, and target audience. Users can copy or share the blessings.",
-    component: BlessingCard,
+      "Interactive Spring Festival blessing card component. Users can rate blessings (like/dislike), request more similar blessings, or ask for different styles. User interactions are sent back to the AI to help personalize future responses. Each blessing includes title, content, style, and target audience.",
+    component: InteractiveBlessingCard,
     propsSchema: blessingCardSchema,
   },
   {
     name: "MemeCard",
     description:
-      "A component that displays Spring Festival meme ideas with creative descriptions, captions, design tips, and usage scenarios. Supports different styles (festive, funny, cute, creative). Users can copy the ideas and captions. Use this for meme IDEAS only, not for actual generated images.",
-    component: MemeCard,
+      "Interactive Spring Festival meme idea card component. Users can give 5-star ratings, select ideas to generate images, and request quick optimizations (more humorous, simpler, more detailed, different scenario). User feedback helps AI understand preferences and generate better content. Use this for meme IDEAS with interaction support.",
+    component: InteractiveMemeCard,
     propsSchema: memeCardSchema,
   },
   {
