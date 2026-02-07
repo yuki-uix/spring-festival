@@ -492,7 +492,7 @@ const InteractiveMemeCardBase = ({
 export const InteractiveMemeCard = withInteractable(
   InteractiveMemeCardBase,
   {
-    componentId: 'meme-card-interactive',
-    interactionDescription: '用户可以对表情包创意进行评分、选择生成图片、优化创意内容等交互操作。当用户点击"生成这个创意的图片"按钮时，你应该立即调用 generateMemeImage 工具来生成实际的图片。'
+    componentName: 'MemeCard',
+    description: '用户可以对表情包创意进行评分、选择生成图片、优化创意内容等交互操作。当用户点击"生成这个创意的图片"按钮时，你应该立即调用 generateMemeImage 工具来生成实际的图片。'
   }
 );

@@ -381,7 +381,7 @@ const InteractiveBlessingCardBase = ({
 export const InteractiveBlessingCard = withInteractable(
   InteractiveBlessingCardBase,
   {
-    componentId: 'blessing-card',
-    interactionDescription: '用户可以对祝福语进行评价、复制、分享，并请求生成更多相似或不同风格的内容'
+    componentName: 'BlessingCard',
+    description: '用户可以对祝福语进行评价、复制、分享，并请求生成更多相似或不同风格的内容'
   }
 );

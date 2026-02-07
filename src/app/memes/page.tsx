@@ -174,7 +174,6 @@ export default function MemesPage() {
       apiKey={process.env.NEXT_PUBLIC_TAMBO_API_KEY || ""}
       components={components}
       tools={tools}
-      systemPrompt={MEMES_SYSTEM_PROMPT}
     >
       <MemesContent />
     </TamboProvider>
