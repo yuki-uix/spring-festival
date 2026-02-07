@@ -3,6 +3,9 @@
 import { TamboProvider } from "@tambo-ai/react";
 import { components, tools } from "@/lib/tambo";
 import { MessageThreadFull } from "@/components/tambo/message-thread-full";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/hooks/useLanguage";
+import { createTranslator } from "@/locales/translations";
 import Link from "next/link";
 
 const MEMES_SYSTEM_PROMPT = `你是一个专业的春节表情包创意生成助手。你的任务是根据用户的需求生成有趣、有创意的表情包方案，并且可以将创意转换为实际的图片。
@@ -79,6 +82,92 @@ AI："好的，我现在开始为您生成图片，大约需要 10-20 秒，请�
 
 现在，请根据用户的需求开始工作！`;
 
+function MemesContent() {
+  const { language, isInitialized } = useLanguage();
+  const t = createTranslator(language);
+
+  if (!isInitialized) {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-red-100">
+      <LanguageSwitcher />
+      
+      {/* Header */}
+      <div className="bg-white/90 backdrop-blur border-b border-yellow-200 sticky top-0 z-10 shadow-sm">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4 flex items-center justify-between gap-2">
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 sm:gap-3 text-gray-600 hover:text-yellow-600 active:text-yellow-700 transition-colors min-w-0"
+          >
+            <span className="text-xl sm:text-2xl flex-shrink-0">←</span>
+            <span className="font-medium text-sm sm:text-base hidden sm:inline">
+              {t('memes.backHome')}
+            </span>
+            <span className="font-medium text-sm sm:hidden">
+              {t('memes.backShort')}
+            </span>
+          </Link>
+          <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-center min-w-0">
+            <span className="text-2xl sm:text-3xl flex-shrink-0">😄</span>
+            <h1 className="text-base sm:text-xl md:text-2xl font-bold text-yellow-600 truncate">
+              {t('memes.title')}
+            </h1>
+          </div>
+          <div className="w-16 sm:w-24 flex-shrink-0" /> {/* Spacer for centering */}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+        {/* Instructions */}
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 border border-yellow-200 sm:border-2">
+          <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 mb-2 sm:mb-3 flex items-center gap-2">
+            <span>💡</span>
+            {t('memes.guideTitle')}
+          </h2>
+          <div className="space-y-1.5 sm:space-y-2 text-gray-600 text-sm sm:text-base">
+            <p>
+              • {t('memes.styleSelection')}
+              <span className="font-medium text-yellow-600">
+                {t('memes.styles')}
+              </span>
+            </p>
+            <p>
+              • {t('memes.describe')}
+            </p>
+            <p>• {t('memes.aiGeneration')}</p>
+          </div>
+          
+          {/* Quick Start Examples */}
+          <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
+            <p className="text-xs sm:text-sm font-medium text-gray-700 mb-2">
+              {t('memes.quickStart')}
+            </p>
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
+              <span className="px-2 sm:px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
+                {t('memes.example1')}
+              </span>
+              <span className="px-2 sm:px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
+                {t('memes.example2')}
+              </span>
+              <span className="px-2 sm:px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
+                {t('memes.example3')}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Chat Interface */}
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-yellow-200 sm:border-2 overflow-hidden h-[500px] sm:h-[550px] md:h-[600px]">
+          <MessageThreadFull />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function MemesPage() {
   return (
     <TamboProvider
@@ -87,74 +176,7 @@ export default function MemesPage() {
       tools={tools}
       systemPrompt={MEMES_SYSTEM_PROMPT}
     >
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-red-100">
-        {/* Header */}
-        <div className="bg-white/90 backdrop-blur border-b border-yellow-200 sticky top-0 z-10 shadow-sm">
-          <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4 flex items-center justify-between gap-2">
-            <Link
-              href="/"
-              className="flex items-center gap-1.5 sm:gap-3 text-gray-600 hover:text-yellow-600 active:text-yellow-700 transition-colors min-w-0"
-            >
-              <span className="text-xl sm:text-2xl flex-shrink-0">←</span>
-              <span className="font-medium text-sm sm:text-base hidden sm:inline">返回首页</span>
-              <span className="font-medium text-sm sm:hidden">返回</span>
-            </Link>
-            <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-center min-w-0">
-              <span className="text-2xl sm:text-3xl flex-shrink-0">😄</span>
-              <h1 className="text-base sm:text-xl md:text-2xl font-bold text-yellow-600 truncate">
-                春节表情包生成器
-              </h1>
-            </div>
-            <div className="w-16 sm:w-24 flex-shrink-0" /> {/* Spacer for centering */}
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
-          {/* Instructions */}
-          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 border border-yellow-200 sm:border-2">
-            <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 mb-2 sm:mb-3 flex items-center gap-2">
-              <span>💡</span>
-              使用指南
-            </h2>
-            <div className="space-y-1.5 sm:space-y-2 text-gray-600 text-sm sm:text-base">
-              <p>
-                • 选择表情包风格：
-                <span className="font-medium text-yellow-600">
-                  喜庆、搞笑、可爱、创意
-                </span>
-              </p>
-              <p>
-                • 描述你想要的表情包内容和场景
-              </p>
-              <p>• AI 会生成表情包创意和文案建议</p>
-            </div>
-            
-            {/* Quick Start Examples */}
-            <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
-              <p className="text-xs sm:text-sm font-medium text-gray-700 mb-2">
-                快速开始示例：
-              </p>
-              <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                <span className="px-2 sm:px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
-                  "发红包的搞笑表情包"
-                </span>
-                <span className="px-2 sm:px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
-                  "可爱风格的拜年表情包"
-                </span>
-                <span className="px-2 sm:px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
-                  "吃饺子主题的创意表情包"
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Chat Interface */}
-          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-yellow-200 sm:border-2 overflow-hidden h-[500px] sm:h-[550px] md:h-[600px]">
-            <MessageThreadFull />
-          </div>
-        </div>
-      </div>
+      <MemesContent />
     </TamboProvider>
   );
 }

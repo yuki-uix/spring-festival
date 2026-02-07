@@ -3,6 +3,9 @@
 import { TamboProvider } from "@tambo-ai/react";
 import { components, tools } from "@/lib/tambo";
 import { MessageThreadFull } from "@/components/tambo/message-thread-full";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/hooks/useLanguage";
+import { createTranslator } from "@/locales/translations";
 import Link from "next/link";
 
 const BLESSINGS_SYSTEM_PROMPT = `你是一个专业的春节祝福语生成助手。你的任务是根据用户的需求生成高质量、有创意的春节祝福语。
@@ -39,6 +42,92 @@ const BLESSINGS_SYSTEM_PROMPT = `你是一个专业的春节祝福语生成助�
 
 现在，请根据用户的需求开始生成春节祝福语！`;
 
+function BlessingsContent() {
+  const { language, isInitialized } = useLanguage();
+  const t = createTranslator(language);
+
+  if (!isInitialized) {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-red-100">
+      <LanguageSwitcher />
+      
+      {/* Header */}
+      <div className="bg-white/90 backdrop-blur border-b border-red-200 sticky top-0 z-10 shadow-sm">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4 flex items-center justify-between gap-2">
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 sm:gap-3 text-gray-600 hover:text-red-600 active:text-red-700 transition-colors min-w-0"
+          >
+            <span className="text-xl sm:text-2xl flex-shrink-0">←</span>
+            <span className="font-medium text-sm sm:text-base hidden sm:inline">
+              {t('blessings.backHome')}
+            </span>
+            <span className="font-medium text-sm sm:hidden">
+              {t('blessings.backShort')}
+            </span>
+          </Link>
+          <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-center min-w-0">
+            <span className="text-2xl sm:text-3xl flex-shrink-0">✨</span>
+            <h1 className="text-base sm:text-xl md:text-2xl font-bold text-red-600 truncate">
+              {t('blessings.title')}
+            </h1>
+          </div>
+          <div className="w-16 sm:w-24 flex-shrink-0" /> {/* Spacer for centering */}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+        {/* Instructions */}
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 border border-red-200 sm:border-2">
+          <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 mb-2 sm:mb-3 flex items-center gap-2">
+            <span>💡</span>
+            {t('blessings.guideTitle')}
+          </h2>
+          <div className="space-y-1.5 sm:space-y-2 text-gray-600 text-sm sm:text-base">
+            <p>
+              • {t('blessings.styleSelection')}
+              <span className="font-medium text-red-600">
+                {t('blessings.styles')}
+              </span>
+            </p>
+            <p>
+              • {t('blessings.targetAudience')}
+            </p>
+            <p>• {t('blessings.multipleGeneration')}</p>
+          </div>
+          
+          {/* Quick Start Examples */}
+          <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
+            <p className="text-xs sm:text-sm font-medium text-gray-700 mb-2">
+              {t('blessings.quickStart')}
+            </p>
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
+              <span className="px-2 sm:px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
+                {t('blessings.example1')}
+              </span>
+              <span className="px-2 sm:px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
+                {t('blessings.example2')}
+              </span>
+              <span className="px-2 sm:px-3 py-1 bg-pink-50 text-pink-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
+                {t('blessings.example3')}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Chat Interface */}
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-red-200 sm:border-2 overflow-hidden h-[500px] sm:h-[550px] md:h-[600px]">
+          <MessageThreadFull />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function BlessingsPage() {
   return (
     <TamboProvider
@@ -47,74 +136,7 @@ export default function BlessingsPage() {
       tools={tools}
       systemPrompt={BLESSINGS_SYSTEM_PROMPT}
     >
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-red-100">
-        {/* Header */}
-        <div className="bg-white/90 backdrop-blur border-b border-red-200 sticky top-0 z-10 shadow-sm">
-          <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4 flex items-center justify-between gap-2">
-            <Link
-              href="/"
-              className="flex items-center gap-1.5 sm:gap-3 text-gray-600 hover:text-red-600 active:text-red-700 transition-colors min-w-0"
-            >
-              <span className="text-xl sm:text-2xl flex-shrink-0">←</span>
-              <span className="font-medium text-sm sm:text-base hidden sm:inline">返回首页</span>
-              <span className="font-medium text-sm sm:hidden">返回</span>
-            </Link>
-            <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-center min-w-0">
-              <span className="text-2xl sm:text-3xl flex-shrink-0">✨</span>
-              <h1 className="text-base sm:text-xl md:text-2xl font-bold text-red-600 truncate">
-                春节祝福语生成器
-              </h1>
-            </div>
-            <div className="w-16 sm:w-24 flex-shrink-0" /> {/* Spacer for centering */}
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
-          {/* Instructions */}
-          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 border border-red-200 sm:border-2">
-            <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 mb-2 sm:mb-3 flex items-center gap-2">
-              <span>💡</span>
-              使用指南
-            </h2>
-            <div className="space-y-1.5 sm:space-y-2 text-gray-600 text-sm sm:text-base">
-              <p>
-                • 选择祝福语风格：
-                <span className="font-medium text-red-600">
-                  传统、幽默、文艺、商务
-                </span>
-              </p>
-              <p>
-                • 指定对象：家人、朋友、同事、客户等
-              </p>
-              <p>• 可以要求生成多条祝福语供选择</p>
-            </div>
-            
-            {/* Quick Start Examples */}
-            <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
-              <p className="text-xs sm:text-sm font-medium text-gray-700 mb-2">
-                快速开始示例：
-              </p>
-              <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                <span className="px-2 sm:px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
-                  "生成传统风格的春节祝福语"
-                </span>
-                <span className="px-2 sm:px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
-                  "给朋友的幽默祝福语"
-                </span>
-                <span className="px-2 sm:px-3 py-1 bg-pink-50 text-pink-700 rounded-full text-xs sm:text-sm whitespace-nowrap">
-                  "文艺风格的新年寄语"
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Chat Interface */}
-          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-red-200 sm:border-2 overflow-hidden h-[500px] sm:h-[550px] md:h-[600px]">
-            <MessageThreadFull />
-          </div>
-        </div>
-      </div>
+      <BlessingsContent />
     </TamboProvider>
   );
 }
