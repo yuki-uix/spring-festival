@@ -70,21 +70,21 @@ export const MessageThreadFull = React.forwardRef<
   const defaultSuggestions: Suggestion[] = [
     {
       id: "suggestion-1",
-      title: "Get started",
-      detailedSuggestion: "What can you help me with?",
+      title: "快速开始",
+      detailedSuggestion: "告诉我你想要什么风格的春节内容",
       messageId: "welcome-query",
     },
     {
       id: "suggestion-2",
-      title: "Learn more",
-      detailedSuggestion: "Tell me about your capabilities.",
-      messageId: "capabilities-query",
+      title: "查看示例",
+      detailedSuggestion: "给我看一些春节祝福语和表情包的例子",
+      messageId: "examples-query",
     },
     {
       id: "suggestion-3",
-      title: "Examples",
-      detailedSuggestion: "Show me some example queries I can try.",
-      messageId: "examples-query",
+      title: "了解功能",
+      detailedSuggestion: "你可以帮我做什么？",
+      messageId: "capabilities-query",
     },
   ];
 

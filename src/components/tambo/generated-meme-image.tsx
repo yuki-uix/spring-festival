@@ -93,27 +93,71 @@ export const GeneratedMemeImage = ({
           // 1. 绘制原始图片
           ctx.drawImage(img, 0, 0);
 
-          // 2. 配置文字样式
-          const fontSize = Math.floor(img.width * 0.08); // 根据图片大小调整字体
+          // 2. 计算安全边距（8%-10%，这里使用9%作为平衡值）
+          const safeMargin = img.width * 0.09; // 左右各9%安全边距
+          const maxTextWidth = img.width - (safeMargin * 2); // 文字最大宽度
+
+          // 3. 配置文字样式
+          let fontSize = Math.floor(img.width * 0.08); // 根据图片大小调整字体
           ctx.font = `bold ${fontSize}px "PingFang SC", "Microsoft YaHei", Arial, sans-serif`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
 
-          // 3. 绘制文字（带描边效果）
+          // 4. 动态调整字体大小，确保文字不超出安全区域
+          let textWidth = ctx.measureText(caption).width;
+          while (textWidth > maxTextWidth && fontSize > 12) {
+            fontSize -= 2;
+            ctx.font = `bold ${fontSize}px "PingFang SC", "Microsoft YaHei", Arial, sans-serif`;
+            textWidth = ctx.measureText(caption).width;
+          }
+
+          // 5. 如果文字仍然太长，进行换行处理
+          const lines: string[] = [];
+          if (textWidth > maxTextWidth) {
+            // 将文字分成多行
+            const chars = caption.split('');
+            let currentLine = '';
+            
+            for (const char of chars) {
+              const testLine = currentLine + char;
+              const testWidth = ctx.measureText(testLine).width;
+              
+              if (testWidth > maxTextWidth && currentLine.length > 0) {
+                lines.push(currentLine);
+                currentLine = char;
+              } else {
+                currentLine = testLine;
+              }
+            }
+            
+            if (currentLine.length > 0) {
+              lines.push(currentLine);
+            }
+          } else {
+            lines.push(caption);
+          }
+
+          // 6. 绘制文字（带描边效果，支持多行）
           const x = img.width / 2;
-          const y = img.height * 0.85; // 文字位置在底部15%处
+          const lineHeight = fontSize * 1.2; // 行高为字体大小的1.2倍
+          const totalHeight = lines.length * lineHeight;
+          const startY = img.height * 0.85 - (totalHeight / 2) + (lineHeight / 2);
 
-          // 描边（白色/浅色，增加可读性）
-          ctx.strokeStyle = config.captionStroke;
-          ctx.lineWidth = Math.floor(fontSize * 0.15);
-          ctx.lineJoin = "round";
-          ctx.strokeText(caption, x, y);
+          lines.forEach((line, index) => {
+            const y = startY + (index * lineHeight);
 
-          // 填充（主色）
-          ctx.fillStyle = config.captionColor;
-          ctx.fillText(caption, x, y);
+            // 描边（白色/浅色，增加可读性）
+            ctx.strokeStyle = config.captionStroke;
+            ctx.lineWidth = Math.floor(fontSize * 0.15);
+            ctx.lineJoin = "round";
+            ctx.strokeText(line, x, y);
 
-          // 4. 转换为图片 URL
+            // 填充（主色）
+            ctx.fillStyle = config.captionColor;
+            ctx.fillText(line, x, y);
+          });
+
+          // 7. 转换为图片 URL
           const compositeUrl = canvas.toDataURL("image/png", 0.95);
           setCompositeImageUrl(compositeUrl);
           setIsProcessing(false);
@@ -243,7 +287,7 @@ export const GeneratedMemeImage = ({
         <p className="text-xs sm:text-sm text-blue-800 flex items-start gap-2">
           <span className="text-base flex-shrink-0">✨</span>
           <span>
-            文字已使用 Canvas 技术清晰叠加到图片上，确保完美显示效果！
+            文字已使用 Canvas 技术清晰叠加到图片上，带有 9% 安全边距，确保完美显示效果，文字不会超出表情包边界！
           </span>
         </p>
       </div>
