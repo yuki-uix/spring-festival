@@ -31,6 +31,8 @@ import {
   ThreadHistorySearch,
 } from "@/components/tambo/thread-history";
 import { useMergeRefs } from "@/lib/thread-hooks";
+import { useLanguage } from "@/hooks/useLanguage";
+import { createTranslator } from "@/locales/translations";
 import type { Suggestion } from "@tambo-ai/react";
 import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
@@ -57,6 +59,8 @@ export const MessageThreadFull = React.forwardRef<
 >(({ className, variant, ...props }, ref) => {
   const { containerRef, historyPosition } = useThreadContainerContext();
   const mergedRef = useMergeRefs<HTMLDivElement | null>(ref, containerRef);
+  const { language } = useLanguage();
+  const t = createTranslator(language);
 
   const threadHistorySidebar = (
     <ThreadHistory position={historyPosition}>
@@ -70,20 +74,20 @@ export const MessageThreadFull = React.forwardRef<
   const defaultSuggestions: Suggestion[] = [
     {
       id: "suggestion-1",
-      title: "快速开始",
-      detailedSuggestion: "告诉我你想要什么风格的春节内容",
+      title: t('chat.suggestions.quickStart.title'),
+      detailedSuggestion: t('chat.suggestions.quickStart.detail'),
       messageId: "welcome-query",
     },
     {
       id: "suggestion-2",
-      title: "查看示例",
-      detailedSuggestion: "给我看一些春节祝福语和表情包的例子",
+      title: t('chat.suggestions.viewExamples.title'),
+      detailedSuggestion: t('chat.suggestions.viewExamples.detail'),
       messageId: "examples-query",
     },
     {
       id: "suggestion-3",
-      title: "了解功能",
-      detailedSuggestion: "你可以帮我做什么？",
+      title: t('chat.suggestions.learnMore.title'),
+      detailedSuggestion: t('chat.suggestions.learnMore.detail'),
       messageId: "capabilities-query",
     },
   ];
@@ -117,7 +121,7 @@ export const MessageThreadFull = React.forwardRef<
         {/* Message input */}
         <div className="px-3 sm:px-4 md:px-6 pb-3 sm:pb-4">
           <MessageInput>
-            <MessageInputTextarea placeholder="输入您的消息或粘贴图片..." />
+            <MessageInputTextarea placeholder={t('chat.inputPlaceholder')} />
             <MessageInputToolbar>
               <MessageInputFileButton />
               <MessageInputMcpPromptButton />

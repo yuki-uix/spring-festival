@@ -9,11 +9,11 @@ export const translations = {
   home: {
     title: {
       zh: '春节祝福生成器',
-      en: 'Lunar New Year Blessing Generator',
+      en: 'Spring Festival Blessing Generator',
     },
     subtitle: {
       zh: '用 AI 生成独特的春节祝福语和趣味表情包',
-      en: 'Generate unique Lunar New Year blessings and fun memes with AI',
+      en: 'Generate unique Spring Festival blessings and fun memes with AI',
     },
     blessings: {
       title: {
@@ -48,7 +48,7 @@ export const translations = {
       },
       description: {
         zh: '生成春节主题的趣味表情包',
-        en: 'Generate fun Lunar New Year themed memes',
+        en: 'Generate fun Spring Festival themed memes',
       },
       button: {
         zh: '开始生成 →',
@@ -106,7 +106,7 @@ export const translations = {
     footer: {
       greeting: {
         zh: '🎊 恭祝新春快乐，万事如意！🎊',
-        en: '🎊 Happy Lunar New Year! Wishing you all the best! 🎊',
+        en: '🎊 Happy Spring Festival! Wishing you all the best! 🎊',
       },
     },
   },
@@ -210,6 +210,45 @@ export const translations = {
     example3: {
       zh: '"吃饺子主题的创意表情包"',
       en: '"Creative meme about eating dumplings"',
+    },
+  },
+  // Chat Interface
+  chat: {
+    suggestions: {
+      quickStart: {
+        title: {
+          zh: '快速开始',
+          en: 'Quick Start',
+        },
+        detail: {
+          zh: '告诉我你想要什么风格的春节内容',
+          en: 'Tell me what style of Spring Festival content you want',
+        },
+      },
+      viewExamples: {
+        title: {
+          zh: '查看示例',
+          en: 'View Examples',
+        },
+        detail: {
+          zh: '给我看一些春节祝福语和表情包的例子',
+          en: 'Show me some Spring Festival blessings and meme examples',
+        },
+      },
+      learnMore: {
+        title: {
+          zh: '了解功能',
+          en: 'Learn Features',
+        },
+        detail: {
+          zh: '你可以帮我做什么？',
+          en: 'What can you help me with?',
+        },
+      },
+    },
+    inputPlaceholder: {
+      zh: '输入您的消息或粘贴图片...',
+      en: 'Type your message or paste an image...',
     },
   },
 } as const;
