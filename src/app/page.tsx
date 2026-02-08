@@ -2,6 +2,7 @@
 
 import { ApiKeyCheck } from "@/components/ApiKeyCheck";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { DynamicTitle } from "@/components/DynamicTitle";
 import { useLanguage } from "@/hooks/useLanguage";
 import { createTranslator } from "@/locales/translations";
 import Link from "next/link";
@@ -17,6 +18,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-yellow-50 to-red-100 flex flex-col items-center justify-start md:justify-center p-4 sm:p-6 lg:p-8">
+      <DynamicTitle 
+        zhTitle="春节祝福生成器 | AI 驱动的春节祝福语和表情包生成器"
+        enTitle="Spring Festival Blessing Generator | AI-Powered Generator"
+      />
       <LanguageSwitcher />
       
       <main className="max-w-6xl w-full space-y-6 sm:space-y-8 py-6 sm:py-8">

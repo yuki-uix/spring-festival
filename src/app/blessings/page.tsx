@@ -4,6 +4,7 @@ import { TamboProvider } from "@tambo-ai/react";
 import { components, tools } from "@/lib/tambo";
 import { MessageThreadFull } from "@/components/tambo/message-thread-full";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { DynamicTitle } from "@/components/DynamicTitle";
 import { useLanguage } from "@/hooks/useLanguage";
 import { createTranslator } from "@/locales/translations";
 import Link from "next/link";
@@ -52,6 +53,10 @@ function BlessingsContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-red-100">
+      <DynamicTitle 
+        zhTitle="春节祝福语生成器"
+        enTitle="Spring Festival Blessing Generator"
+      />
       <LanguageSwitcher />
       
       {/* Header */}

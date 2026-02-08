@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "春节祝福生成器 | AI 驱动的春节祝福语和表情包生成器",
-  description: "使用 AI 技术快速生成个性化的春节祝福语和有趣的表情包创意。支持多种风格，一键分享。",
+  title: "Spring Festival Blessing Generator | AI-Powered Generator",
+  description: "Generate personalized Spring Festival blessings and fun memes with AI. Multiple styles, easy sharing.",
   viewport: {
     width: "device-width",
     initialScale: 1,
@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
