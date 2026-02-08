@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {
   type TamboThread,
+  useTambo,
   useTamboThread,
   useTamboThreadList,
 } from "@tambo-ai/react";
@@ -15,6 +16,7 @@ import {
   PlusIcon,
   SearchIcon,
   Sparkles,
+  Trash2,
 } from "lucide-react";
 import React, { useMemo } from "react";
 
@@ -37,6 +39,7 @@ interface ThreadHistoryContextValue {
   position?: "left" | "right";
   updateThreadName: (newName: string, threadId?: string) => Promise<void>;
   generateThreadName: (threadId: string) => Promise<TamboThread>;
+  deleteThread: (threadId: string) => Promise<void>;
 }
 
 const ThreadHistoryContext =
@@ -79,6 +82,7 @@ const ThreadHistory = React.forwardRef<HTMLDivElement, ThreadHistoryProps>(
     const [shouldFocusSearch, setShouldFocusSearch] = React.useState(false);
 
     const { data: threads, isLoading, error, refetch } = useTamboThreadList();
+    const { client } = useTambo();
 
     const {
       switchCurrentThread,
@@ -87,6 +91,27 @@ const ThreadHistory = React.forwardRef<HTMLDivElement, ThreadHistoryProps>(
       updateThreadName,
       generateThreadName,
     } = useTamboThread();
+
+    // Delete thread function
+    const deleteThread = React.useCallback(
+      async (threadId: string) => {
+        try {
+          await client.beta.threads.delete(threadId);
+          
+          // If we deleted the current thread, start a new one
+          if (currentThread?.id === threadId) {
+            startNewThread();
+          }
+          
+          // Refetch the thread list to update UI
+          await refetch();
+        } catch (error) {
+          console.error("Failed to delete thread:", error);
+          throw error;
+        }
+      },
+      [client, currentThread, startNewThread, refetch],
+    );
 
     // Update CSS variable when sidebar collapses/expands
     React.useEffect(() => {
@@ -121,6 +146,7 @@ const ThreadHistory = React.forwardRef<HTMLDivElement, ThreadHistoryProps>(
         position,
         updateThreadName,
         generateThreadName,
+        deleteThread,
       }),
       [
         threads,
@@ -136,6 +162,7 @@ const ThreadHistory = React.forwardRef<HTMLDivElement, ThreadHistoryProps>(
         position,
         updateThreadName,
         generateThreadName,
+        deleteThread,
       ],
     );
 
@@ -369,6 +396,7 @@ const ThreadHistoryList = React.forwardRef<
     onThreadChange,
     updateThreadName,
     generateThreadName,
+    deleteThread,
     refetch,
   } = useThreadHistoryContext();
 
@@ -450,6 +478,18 @@ const ThreadHistoryList = React.forwardRef<
       await refetch();
     } catch (error) {
       console.error("Failed to generate name:", error);
+    }
+  };
+
+  const handleDelete = async (thread: TamboThread) => {
+    // Confirm before deleting
+    if (window.confirm(`Are you sure you want to delete "${thread.name ?? 'this thread'}"?`)) {
+      try {
+        await deleteThread(thread.id);
+        onThreadChange?.();
+      } catch (error) {
+        console.error("Failed to delete thread:", error);
+      }
     }
   };
 
@@ -562,6 +602,7 @@ const ThreadHistoryList = React.forwardRef<
               thread={thread}
               onRename={handleRename}
               onGenerateName={handleGenerateName}
+              onDelete={handleDelete}
             />
           </div>
         ))}
@@ -594,10 +635,12 @@ const ThreadOptionsDropdown = ({
   thread,
   onRename,
   onGenerateName,
+  onDelete,
 }: {
   thread: TamboThread;
   onRename: (thread: TamboThread) => void;
   onGenerateName: (thread: TamboThread) => void;
+  onDelete: (thread: TamboThread) => void;
 }) => {
   return (
     <DropdownMenu.Root>
@@ -634,6 +677,17 @@ const ThreadOptionsDropdown = ({
           >
             <Sparkles className="h-3 w-3" />
             Generate Name
+          </DropdownMenu.Item>
+          <DropdownMenu.Separator className="h-px bg-border my-1" />
+          <DropdownMenu.Item
+            className="flex items-center gap-2 px-2 py-1.5 text-destructive hover:bg-destructive/10 rounded-sm cursor-pointer outline-none transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(thread);
+            }}
+          >
+            <Trash2 className="h-3 w-3" />
+            Delete
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
